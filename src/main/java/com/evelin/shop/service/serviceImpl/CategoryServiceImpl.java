@@ -2,6 +2,7 @@ package com.evelin.shop.service.serviceImpl;
 
 import com.evelin.shop.model.entity.Category;
 import com.evelin.shop.model.entity.CategoryName;
+import com.evelin.shop.model.service.CategoryServiceModel;
 import com.evelin.shop.repository.CategoryRepository;
 import com.evelin.shop.service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -29,5 +30,19 @@ public class CategoryServiceImpl implements CategoryService {
                                         categoryName.name())));
                     });
         }
+    }
+
+    @Override
+    public CategoryServiceModel findByCategoryName(CategoryName categoryName) {
+
+        return this.categoryRepository
+                .findByName(categoryName)
+                .map(category ->this.modelMapper.map(category, CategoryServiceModel.class))
+                .orElse(null);
+    }
+
+    @Override
+    public Category find(CategoryName categoryName) {
+        return null;
     }
 }

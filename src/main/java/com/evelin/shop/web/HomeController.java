@@ -1,15 +1,33 @@
 package com.evelin.shop.web;
 
+import com.evelin.shop.service.ItemService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/")
 public class HomeController {
 
-    @GetMapping("/")
-    public String index(){
-        return "index";
+    private final ItemService itemService;
+
+    public HomeController(ItemService itemService) {
+        this.itemService = itemService;
     }
+
+    @GetMapping("/")
+    public ModelAndView index(HttpSession httpSession, ModelAndView modelAndView){
+
+        if(httpSession.getAttribute("user") == null){
+            modelAndView.setViewName("index");
+        }else{
+            modelAndView.addObject("items",this.itemService.findAllItems());
+            modelAndView.setViewName("home");
+        }
+        return modelAndView;
+        }
+
 }
